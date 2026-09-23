@@ -28,6 +28,20 @@ sola vez: **Settings → Pages → Deploy from a branch → `main` / `(root)` �
   una app.
 - Respeta la opción del sistema «reducir movimiento» y funciona en el móvil.
 
+## Voces nativas (tonos y palabra del día)
+
+Las cartas de los tonos y la palabra del día usan **audios grabados con
+voces neuronales chinas** (las mismas de las apps). Para grabarlos:
+
+1. Permisos (una sola vez): **Settings → Actions → General → Workflow
+   permissions → Read and write permissions → Save**.
+2. **Actions → Grabar los audios → Run workflow**. Tarda uno o dos minutos.
+
+Si el servicio de voz rechaza a GitHub, en el Mac: doble clic en
+`tools/GRABAR-AUDIOS.command`. Mientras no haya grabaciones, se usa la voz del
+navegador. Las palabras del día están en `js/palabras.js`: si añades alguna,
+vuelve a pulsar **Run workflow** y solo se grabarán las nuevas.
+
 ## Estructura
 
 ```
@@ -35,6 +49,9 @@ index.html               la página
 css/landing.css          diseño y animaciones
 js/landing.js            paralaje, animaciones e interacción
 js/sonido.js             música y efectos (Web Audio, sin ficheros de audio)
+js/palabras.js           palabras del día
+audio/                   voces nativas de los tonos y las palabras + manifest.js
+tools/grabar_audios.py   grabador (edge-tts) · lo usa el botón de Actions
 js/vendor/               Hanzi Writer (MIT) y los trazos de 学中文 (Arphic Public License)
 img/                     favicon, nubes y bambú en SVG
 ```

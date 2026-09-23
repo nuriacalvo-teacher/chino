@@ -193,9 +193,22 @@
   });
 
   // ------------------------------------------------------------ voz china del navegador
+  // Voz nativa grabada (audio/manifest.js) y, si no existe, la voz del navegador.
+  var current = null;
   function say(txt) {
+    var rec = window.CHINO_AUDIO && window.CHINO_AUDIO[txt];
+    if (current) { current.pause(); current = null; }
+    if ("speechSynthesis" in window) speechSynthesis.cancel();
+    if (rec) {
+      current = new Audio("audio/" + rec);
+      var p = current.play();
+      if (p && p.catch) p.catch(function () { tts(txt); });
+      return;
+    }
+    tts(txt);
+  }
+  function tts(txt) {
     if (!("speechSynthesis" in window)) return;
-    speechSynthesis.cancel();
     var u = new SpeechSynthesisUtterance(txt);
     u.lang = "zh-CN"; u.rate = 0.7;
     var v = speechSynthesis.getVoices().filter(function (x) { return /^zh[-_]CN/i.test(x.lang); })[0];
@@ -218,18 +231,7 @@
   });
 
   // ------------------------------------------------------------ palabra del día
-  var WORDS = [
-    ["你好", "nǐ hǎo", "hola", 1], ["谢谢", "xièxie", "gracias", 1], ["朋友", "péngyou", "amigo, amiga", 1], ["老师", "lǎoshī", "profesor, profesora", 1],
-    ["学生", "xuésheng", "estudiante", 1], ["喜欢", "xǐhuan", "gustar", 1], ["中国", "Zhōngguó", "China", 1], ["汉语", "Hànyǔ", "chino (idioma)", 1],
-    ["天气", "tiānqì", "tiempo (clima)", 1], ["米饭", "mǐfàn", "arroz", 1], ["苹果", "píngguǒ", "manzana", 1], ["飞机", "fēijī", "avión", 1],
-    ["电影", "diànyǐng", "película", 1], ["明天", "míngtiān", "mañana", 1], ["漂亮", "piàoliang", "bonito, guapa", 1], ["高兴", "gāoxìng", "contento", 1],
-    ["认识", "rènshi", "conocer", 1], ["再见", "zàijiàn", "adiós", 1], ["水果", "shuǐguǒ", "fruta", 1], ["睡觉", "shuì jiào", "dormir", 1],
-    ["旅游", "lǚyóu", "viajar", 2], ["运动", "yùndòng", "hacer deporte", 2], ["咖啡", "kāfēi", "café", 2], ["生日", "shēngrì", "cumpleaños", 2],
-    ["快乐", "kuàilè", "feliz", 2], ["希望", "xīwàng", "esperar, desear", 2], ["便宜", "piányi", "barato", 2], ["手机", "shǒujī", "móvil", 2],
-    ["唱歌", "chàng gē", "cantar", 2], ["跳舞", "tiào wǔ", "bailar", 2], ["颜色", "yánsè", "color", 2], ["眼睛", "yǎnjing", "ojo", 2],
-    ["西瓜", "xīguā", "sandía", 2], ["新年", "xīnnián", "Año Nuevo", 2], ["欢迎", "huānyíng", "bienvenido", 2], ["休息", "xiūxi", "descansar", 2],
-    ["游泳", "yóu yǒng", "nadar", 2], ["告诉", "gàosu", "decir, contar", 2], ["准备", "zhǔnbèi", "preparar", 2], ["虽然", "suīrán", "aunque", 2]
-  ];
+  var WORDS = window.PALABRAS || [["你好", "nǐ hǎo", "hola", 1]];
   var dayIdx = Math.floor(Date.now() / 86400000) % WORDS.length, cur = dayIdx;
   var flip = $(".flip");
   function showWord(i) {
