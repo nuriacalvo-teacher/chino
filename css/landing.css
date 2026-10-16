@@ -310,6 +310,7 @@ a.stop:hover .dot { transform: scale(1.12) rotate(-6deg); }
 .foot-in { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .foot p { margin: 4px 0; }
 .foot .links a { color: var(--gold-2); font-weight: 800; text-decoration: none; }
+.foot .copy { margin-top: 14px; font-size: 13px; opacity: .75; }
 
 /* destellos del cursor */
 .spark { position: fixed; width: 6px; height: 6px; border-radius: 50%; pointer-events: none; z-index: 70; background: var(--gold-2); animation: spark .8s ease-out forwards; }
